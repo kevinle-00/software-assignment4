@@ -1,25 +1,30 @@
 package au.edu.rmit.sct.roadregistry;
 
+import java.util.Date;
+import java.util.HashMap;
+
 public class Person {
+
     private String personID;
     private String firstName;
     private String lastName;
+    private String address;
+    private String birthdate;
+    private HashMap<Date, Integer> demeritPoints; // offenseDate -> demerit points
+    private boolean isSuspended;
 
-    public Person(String personID, String firstName, String lastName) {
-        this.personID = personID;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public boolean addPerson() {
+        // Indicate that are implementing this here:
+        return true;
     }
 
-    public String getPersonID() {
-        return personID;
+    public boolean updatePersonalDetails() {
+        // Indicate that you are implementing this here:
+        return true;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
+    public String addDemeritPoints() {
+        // Indicate that you are implementing this here:
+        return "Success";
     }
 }
