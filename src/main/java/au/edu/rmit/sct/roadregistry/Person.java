@@ -20,7 +20,7 @@ public class Person {
     private boolean isSuspended;
 
     public boolean addPerson(String personID, String firstName, String lastName, String address, String birthdate) {
-        //  Jack
+        // Jack
         this.personID = personID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,31 +29,27 @@ public class Person {
 
         if (conditionOne() && checkAddress() && checkBirthdate()) {
 
-
-
-            return true;
+            
         }
 
-        
         return false;
     }
 
-    //  Condition 1 
+    // Condition 1
 
     private boolean conditionOne() { // Function to evaluate if the given personID meets each criteria of condition 1
         if (this.personID != null) {
             if (!personIDLength() || !personIDNumbers() || !personIDSpecialCharacters() || !personIDUpperCase()) {
-            return false;
+                return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
-        
+
         return true;
     }
 
-    private boolean personIDLength() {  //Checks if the personID is exactly 10 characters long
+    private boolean personIDLength() { // Checks if the personID is exactly 10 characters long
         if (personID.length() != 10) {
             return false;
         }
@@ -61,13 +57,13 @@ public class Person {
         return true;
     }
 
-    private boolean personIDNumbers() {     //Checks if the first two characters are numbers between 2 and 9 
+    private boolean personIDNumbers() { // Checks if the first two characters are numbers between 2 and 9
 
         char firstChar = this.personID.charAt(0); // First Character
         char secondChar = this.personID.charAt(1); // Second Character
 
         int intFirst = Character.getNumericValue(firstChar); // Convert to int
-        int intSecond = Character.getNumericValue(secondChar); 
+        int intSecond = Character.getNumericValue(secondChar);
 
         if ((intFirst <= 2 || intFirst >= 9) && (intSecond <= 2 || intSecond >= 9)) { // Check if both are numbe
             return false;
@@ -76,7 +72,8 @@ public class Person {
         return true;
     }
 
-    private boolean personIDSpecialCharacters() {   //Checks if there are at least two special characters between characters 3 and 8
+    private boolean personIDSpecialCharacters() { // Checks if there are at least two special characters between
+                                                  // characters 3 and 8
         int specialCount = 0;
 
         for (int i = 2; i < this.personID.length() - 2; i++) {
@@ -93,20 +90,23 @@ public class Person {
     }
 
     private boolean personIDUpperCase() {
-        char secondLast = this.personID.charAt(this.personID.length() - 2);
-        char last = this.personID.charAt(this.personID.length() - 1);
+        char secondLast = this.personID.charAt(this.personID.length() - 2); // Second last character
+        char last = this.personID.charAt(this.personID.length() - 1); // Last character
 
-        if (Character.isAlphabetic(last) && Character.isAlphabetic(secondLast)) {
-            if (Character.isUpperCase(last) && Character.isUpperCase(secondLast)) {
-                return true;
-            }
+        if (!Character.isAlphabetic(last) || !Character.isAlphabetic(secondLast)) {
+            return false;
         }
 
-        return false;
+        if (!Character.isUpperCase(last) || !Character.isUpperCase(secondLast)) {
+            return false;
+        }
+
+        return true;
     }
 
-    //  Condition 2
-    private boolean checkAddress() { //Check if address is in the right format 'Street Number|Street|City|State|Country'
+    // Condition 2
+    private boolean checkAddress() { // Check if address is in the right format 'Street
+                                     // Number|Street|City|State|Country'
 
         String[] addressParts = this.address.split("|");
 
@@ -121,19 +121,19 @@ public class Person {
         return true;
     }
 
-    //  Condition 3
-    private boolean checkBirthdate() { //Check if birthdate is in the correct format 'DD-MM-YY'
+    // Condition 3
+    private boolean checkBirthdate() { // Check if birthdate is in the correct format 'DD-MM-YY'
         String[] birthdateParts = this.birthdate.split("-");
 
         if (birthdateParts[0].length() > 2) {
             return false;
         }
 
-        if(birthdateParts[1].length() > 2) {
+        if (birthdateParts[1].length() > 2) {
             return false;
         }
 
-        if(birthdateParts[2].length() > 4) {
+        if (birthdateParts[2].length() > 4) {
             return false;
         }
 
