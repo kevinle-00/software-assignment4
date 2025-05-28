@@ -19,14 +19,27 @@ public class Person {
     private HashMap<Date, Integer> demeritPoints; // offenseDate -> demerit points
     private boolean isSuspended;
 
-    public boolean addPerson(String personID, String firstName, String lastName, String address, String birthdate) {
-        // Jack
+    public Person() {   // Default Constructor for the Person class
+        this.personID = null;
+        this.firstName = null;
+        this.lastName = null;
+        this.address = null;
+        this.birthdate = null;
+    }
+
+    public Person(String personID, String firstName, String lastName, String address, String birthdate) {   // Constructor for the Person class
+
         this.personID = personID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.birthdate = birthdate;
+    
+    }
 
+    public boolean addPerson() {
+        // Jack
+        
         if (conditionOne() && checkAddress() && checkBirthdate()) {
 
             
