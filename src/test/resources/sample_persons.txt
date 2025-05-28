@@ -1,0 +1,3 @@
+56s_d%&fAB,John,Doe,32|Highland Street|Melbourne|Victoria|Australia,15-11-1990
+23s%a$czXY,Jane,Smith,22|Main Street|Geelong|Victoria|Australia,05-06-2005
+badline_without_enough_fields
