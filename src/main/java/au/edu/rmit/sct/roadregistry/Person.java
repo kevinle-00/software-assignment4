@@ -78,7 +78,7 @@ public class Person {
         int intFirst = Character.getNumericValue(firstChar); // Convert to int
         int intSecond = Character.getNumericValue(secondChar);
 
-        if ((intFirst <= 2 || intFirst >= 9) && (intSecond <= 2 || intSecond >= 9)) { // Check if both are numbe
+        if (intFirst < 2 || intFirst >= 9 || intSecond <= 2 || intSecond > 9) {
             return false;
         }
 
@@ -121,7 +121,7 @@ public class Person {
     private boolean checkAddress() { // Check if address is in the right format 'Street
                                      // Number|Street|City|State|Country'
 
-        String[] addressParts = this.address.split("|");
+        String[] addressParts = this.address.split("\\|");
 
         if (addressParts.length != 5) {
             return false;
@@ -135,7 +135,7 @@ public class Person {
     }
 
     // Condition 3
-    private boolean checkBirthdate() { // Check if birthdate is in the correct format 'DD-MM-YY'
+    private boolean checkBirthdate() { // Check if birthdate is in the correct format 'DD-MM-YYYY'
         String[] birthdateParts = this.birthdate.split("-");
 
         if (birthdateParts[0].length() > 2) {
