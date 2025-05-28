@@ -27,13 +27,34 @@ public class Person {
         this.address = address;
         this.birthdate = birthdate;
 
-        return false;
+        if (conditionOne() && checkAddress() && checkBirthdate()) {
 
+
+
+            return true;
+        }
+
+        
+        return false;
     }
 
     //  Condition 1 
+
+    private boolean conditionOne() { // Function to evaluate if the given personID meets each criteria of condition 1
+        if (this.personID != null) {
+            if (!personIDLength() || !personIDNumbers() || !personIDSpecialCharacters() || !personIDUpperCase()) {
+            return false;
+            }
+        }
+        else {
+            return false;
+        }
+        
+        return true;
+    }
+
     private boolean personIDLength() {  //Checks if the personID is exactly 10 characters long
-        if (personID == null || personID.length() != 10) {
+        if (personID.length() != 10) {
             return false;
         }
 
@@ -45,14 +66,14 @@ public class Person {
         char firstChar = this.personID.charAt(0); // First Character
         char secondChar = this.personID.charAt(1); // Second Character
 
-        int intFirst = Character.getNumericValue(firstChar);
-        int intSecond = Character.getNumericValue(secondChar);
+        int intFirst = Character.getNumericValue(firstChar); // Convert to int
+        int intSecond = Character.getNumericValue(secondChar); 
 
-        if ((intFirst > 2 && intFirst < 9) && (intSecond > 2 && intSecond < 9)) {
-            return true;
+        if ((intFirst <= 2 || intFirst >= 9) && (intSecond <= 2 || intSecond >= 9)) { // Check if both are numbe
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     private boolean personIDSpecialCharacters() {   //Checks if there are at least two special characters between characters 3 and 8
@@ -64,14 +85,14 @@ public class Person {
             }
         }
 
-        if (specialCount >= 2) {
-            return true;
+        if (specialCount < 2) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
-    private boolean checkPersonIDUpperCase() {
+    private boolean personIDUpperCase() {
         char secondLast = this.personID.charAt(this.personID.length() - 2);
         char last = this.personID.charAt(this.personID.length() - 1);
 
@@ -85,15 +106,34 @@ public class Person {
     }
 
     //  Condition 2
-    private boolean checkAddress() {
+    private boolean checkAddress() { //Check if address is in the right format 'Street Number|Street|City|State|Country'
 
-        String[] addressParts = address.split("|");
+        String[] addressParts = this.address.split("|");
 
         if (addressParts.length != 5) {
             return false;
         }
 
         if (!addressParts[3].equals("Victoria")) {
+            return false;
+        }
+
+        return true;
+    }
+
+    //  Condition 3
+    private boolean checkBirthdate() { //Check if birthdate is in the correct format 'DD-MM-YY'
+        String[] birthdateParts = this.birthdate.split("-");
+
+        if (birthdateParts[0].length() > 2) {
+            return false;
+        }
+
+        if(birthdateParts[1].length() > 2) {
+            return false;
+        }
+
+        if(birthdateParts[2].length() > 4) {
             return false;
         }
 
