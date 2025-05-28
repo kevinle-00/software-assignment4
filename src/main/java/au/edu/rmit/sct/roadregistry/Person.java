@@ -19,7 +19,7 @@ public class Person {
     private HashMap<Date, Integer> demeritPoints; // offenseDate -> demerit points
     private boolean isSuspended;
 
-    public Person() {   // Default Constructor for the Person class
+    public Person() { // Default Constructor for the Person class
         this.personID = null;
         this.firstName = null;
         this.lastName = null;
@@ -27,22 +27,24 @@ public class Person {
         this.birthdate = null;
     }
 
-    public Person(String personID, String firstName, String lastName, String address, String birthdate) {   // Constructor for the Person class
+    public Person(String personID, String firstName, String lastName, String address, String birthdate) { // Constructor
+                                                                                                          // for the
+                                                                                                          // Person
+                                                                                                          // class
 
         this.personID = personID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.birthdate = birthdate;
-    
+
     }
 
     public boolean addPerson() {
         // Jack
-        
+
         if (conditionOne() && checkAddress() && checkBirthdate()) {
 
-            
         }
 
         return false;
@@ -121,6 +123,10 @@ public class Person {
     private boolean checkAddress() { // Check if address is in the right format 'Street
                                      // Number|Street|City|State|Country'
 
+        if (this.address == null) {
+            return false;
+        }
+
         String[] addressParts = this.address.split("\\|");
 
         if (addressParts.length != 5) {
@@ -136,6 +142,11 @@ public class Person {
 
     // Condition 3
     private boolean checkBirthdate() { // Check if birthdate is in the correct format 'DD-MM-YYYY'
+
+        if (this.birthdate == null) {
+            return false;
+        }
+        
         String[] birthdateParts = this.birthdate.split("-");
 
         if (birthdateParts[0].length() > 2) {
