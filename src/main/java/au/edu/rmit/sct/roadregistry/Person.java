@@ -20,7 +20,7 @@ public class Person {
     private boolean isSuspended;
 
     public boolean addPerson(String personID, String firstName, String lastName, String address, String birthdate) {
-        // Jack
+        //  Jack
         this.personID = personID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,25 +31,13 @@ public class Person {
 
     }
 
-    private Boolean condition1() {   //Checks if the input information meets Condition 1
-        
-        if (personIDLength() && personIDNumbers() && personIDSpecialCharacters() && personIDUpperCase()) {
-            return true;
-        }
-
-        return false;
-    }
-
-
+    //  Condition 1 
     private boolean personIDLength() {  //Checks if the personID is exactly 10 characters long
-        final int CORRECT_CHAR = 10;    // Correct number of characters of personID
-        int numChar = this.personID.length();   // Number of characters of the given personID
-
-        if (numChar == CORRECT_CHAR) {
-            return true;
+        if (personID == null || personID.length() != 10) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     private boolean personIDNumbers() {     //Checks if the first two characters are numbers between 2 and 9 
@@ -83,7 +71,7 @@ public class Person {
         return false;
     }
 
-    private boolean personIDUpperCase() {
+    private boolean checkPersonIDUpperCase() {
         char secondLast = this.personID.charAt(this.personID.length() - 2);
         char last = this.personID.charAt(this.personID.length() - 1);
 
@@ -96,10 +84,7 @@ public class Person {
         return false;
     }
 
-    private boolean condition2() {
-        return false;
-    }
-
+    //  Condition 2
     private boolean checkAddress() {
 
         String[] addressParts = address.split("|");
@@ -113,17 +98,6 @@ public class Person {
         }
 
         return true;
-    }
-
-    private boolean formatCheck() { // Checks if the address is in the correct format 'Street Number|Street|City|State|Country'
-        String[] addressParts = address.split("|");
-
-        if (addressParts.length != 5) {
-            return false;
-        }
-
-        return true;
-
     }
 
     public boolean updatePersonalDetails(String originalPersonID, Person updatedPerson) {
