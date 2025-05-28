@@ -19,9 +19,16 @@ public class Person {
     private HashMap<Date, Integer> demeritPoints; // offenseDate -> demerit points
     private boolean isSuspended;
 
-    public boolean addPerson() {
-        // Indicate that are implementing this here:
-        return true;
+    public boolean addPerson(String personID, String firstName, String lastName, String address, String birthdate) {
+
+        this.personID = personID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.birthdate = birthdate;
+
+        return false;
+
     }
 
     public boolean updatePersonalDetails(String originalPersonID, Person updatedPerson) {
@@ -82,4 +89,85 @@ public class Person {
         // Indicate that you are implementing this here:
         return "Success";
     }
+
+    private Boolean condition1() {   //Checks if the input information meets Condition 1
+        
+        if (personIDLength() && personIDNumbers() && personIDSpecialCharacters() && personIDUpperCase()) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private boolean personIDLength() {  //Checks if the personID is exactly 10 characters long
+        final int CORRECT_CHAR = 10;    // Correct number of characters of personID
+        int numChar = this.personID.length();   // Number of characters of the given personID
+
+        if (numChar == CORRECT_CHAR) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean personIDNumbers() {     //Checks if the first two characters are numbers between 2 and 9 
+
+        char firstChar = this.personID.charAt(0); // First Character
+        char secondChar = this.personID.charAt(1); // Second Character
+
+        int intFirst = Character.getNumericValue(firstChar);
+        int intSecond = Character.getNumericValue(secondChar);
+
+        if ((intFirst > 2 && intFirst < 9) && (intSecond > 2 && intSecond < 9)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean personIDSpecialCharacters() {   //Checks if there are at least two special characters between characters 3 and 8
+        int specialCount = 0;
+
+        for (int i = 2; i < this.personID.length() - 2; i++) {
+            if (!Character.isLetterOrDigit(this.personID.charAt(i))) {
+                specialCount++;
+            }
+        }
+
+        if (specialCount >= 2) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean personIDUpperCase() {
+        char secondLast = this.personID.charAt(this.personID.length() - 2);
+        char last = this.personID.charAt(this.personID.length() - 1);
+
+        if (Character.isAlphabetic(last) && Character.isAlphabetic(secondLast)) {
+            if (Character.isUpperCase(last) && Character.isUpperCase(secondLast)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean condition2() {
+        return false;
+    }
+
+    private boolean personIDAddress() {
+
+        String streetNumber;
+        String street;
+        String city;
+        String state;
+        String country;
+
+        return false;
+    }
+
 }
