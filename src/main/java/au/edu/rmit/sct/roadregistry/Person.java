@@ -230,7 +230,7 @@ public class Person {
     // Helper Methods
 
     private boolean canUpdateAddress(Person oldPerson, Person newPerson) {
-        int age = calculateAgeFromBirthday();
+        int age = calculateAgeFromBirthday(oldPerson.getBirthdate());
         return age >= 18;
     }
 
