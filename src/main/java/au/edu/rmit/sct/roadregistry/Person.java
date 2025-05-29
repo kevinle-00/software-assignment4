@@ -44,16 +44,22 @@ public class Person {
     // Setter and Get
 
     public boolean addPerson() {
-        // Jack
 
-        if (conditionOne() && checkAddress() && checkBirthdate()) {
+        FileWriter fileWriter = null;
+        BufferedWriter bufferedWriter = null;
 
+        if (!conditionOne() || !checkAddress() || !checkBirthdate()) {
+            return false;
         }
 
-        return false;
+        String filePath = "persons.txt";
+
+        String personInfo = personID + "," + firstName + "," + lastName + "," + address + "," + birthdate + "\n";
+
+        return true;
     }
 
-    // Condition 1
+    // 
 
     private boolean conditionOne() { // Function to evaluate if the given personID meets each criteria of condition 1
         if (this.personID != null) {
