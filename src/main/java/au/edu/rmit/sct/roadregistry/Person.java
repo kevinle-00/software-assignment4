@@ -2,6 +2,7 @@ package au.edu.rmit.sct.roadregistry;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -39,6 +40,8 @@ public class Person {
         this.birthdate = birthdate;
 
     }
+
+    // Setter and Get
 
     public boolean addPerson() {
         // Jack
@@ -146,7 +149,7 @@ public class Person {
         if (this.birthdate == null) {
             return false;
         }
-        
+
         String[] birthdateParts = this.birthdate.split("-");
 
         if (birthdateParts[0].length() > 2) {
@@ -163,6 +166,8 @@ public class Person {
 
         return true;
     }
+
+    // |----------------- updatePersonalDetails() - Kevin -----------------|
 
     public boolean updatePersonalDetails(String originalPersonID, Person updatedPerson) {
         // Kevin
@@ -200,6 +205,10 @@ public class Person {
                 String existingAddress = fields[3];
                 String existingBirthdate = fields[4];
 
+                // Create oldPerson object using parsed fields
+                Person oldPerson = new Person(existingID, existingFirst, existingLast, existingAddress,
+                        existingBirthdate);
+
                 // Check if this is the person to update, if not, move on
                 if (!existingID.equals(originalPersonID)) {
                     writer.write(line); // Preserve data
@@ -218,9 +227,110 @@ public class Person {
         return updated;
     }
 
+    // Helper Methods
+
+    private boolean canUpdateAddress(Person oldPerson, Person newPerson) {
+        int age = calculateAgeFromBirthday();
+        return age >= 18;
+    }
+
+    private boolean isValidBirthdayChange(Person oldPerson, Person newPerson) {
+        return oldPerson.getPersonID().equals(newPerson.getPersonID()) &&
+                oldPerson.getFirstName().equals(newPerson.getFirstName()) &&
+                oldPerson.getLastName().equals(newPerson.getLastName()) &&
+                oldPerson.getAddress().equals(newPerson.getAddress());
+
+    }
+
+    private int calculateAgeFromBirthday(String birthdate) {
+        // TODO: Implementation
+        return 0;
+    }
+
+    private boolean canUpdateID(String oldID) {
+        char firstChar = oldID.charAt(0);
+        return !Character.isDigit(firstChar) || ((firstChar - '0') % 2 != 0);
+    }
+
+    private boolean isChanging(String oldValue, String newValue) {
+        return !Objects.equals(oldValue, newValue);
+    }
+
+    private boolean isChangingBirthday(Person oldPerson, Person newPerson) {
+        return isChanging(oldPerson.getBirthdate(), newPerson.getBirthdate());
+    }
+
+    private boolean isChangingID(Person oldPerson, Person newPerson) {
+        return isChanging(oldPerson.getPersonID(), newPerson.getPersonID());
+    }
+
+    private boolean isChangingAddress(Person oldPerson, Person newPerson) {
+        return isChanging(oldPerson.getAddress(), newPerson.getAddress());
+    }
+
+    // |----------------- addDemeritPoints() - Teesha -----------------|
+
     public String addDemeritPoints() {
         // Indicate that you are implementing this here:
         return "Success";
+    }
+
+    // |----------------- Getter and Setter methods -----------------|
+
+    public String getPersonID() {
+        return personID;
+    }
+
+    public void setPersonID(String personID) {
+        this.personID = personID;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public boolean getIsSuspended() {
+        return isSuspended;
+    }
+
+    public void setIsSuspended(boolean isSuspended) {
+        this.isSuspended = isSuspended;
+    }
+
+    public HashMap<Date, Integer> getDemeritPoints() {
+        return demeritPoints;
+    }
+
+    public void setDemeritPoints(HashMap<Date, Integer> demeritPoints) {
+        this.demeritPoints = demeritPoints;
     }
 
 }
