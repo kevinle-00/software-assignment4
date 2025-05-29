@@ -41,27 +41,29 @@ public class Person {
 
     }
 
-    // Setter and Get
+    // |----------------- addPerson() - Jack -----------------|
 
     public boolean addPerson() {
 
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
 
-        if (!conditionOne() || !checkAddress() || !checkBirthdate()) {
+        if (!checkPersonID() || !checkAddress() || !checkBirthdate()) {
             return false;
         }
 
         String filePath = "persons.txt";
 
         String personInfo = personID + "," + firstName + "," + lastName + "," + address + "," + birthdate + "\n";
-
+        
+        //  TO DO: Detect if text file is created + insert info into new text file + insert info into existing text file
         return true;
     }
 
-    // 
-
-    private boolean conditionOne() { // Function to evaluate if the given personID meets each criteria of condition 1
+    // Helper Methods
+    
+    //  Condition 1
+    private boolean checkPersonID() { // Function to evaluate if the given personID meets each criteria of condition 1
         if (this.personID != null) {
             if (!personIDLength() || !personIDNumbers() || !personIDSpecialCharacters() || !personIDUpperCase()) {
                 return false;
