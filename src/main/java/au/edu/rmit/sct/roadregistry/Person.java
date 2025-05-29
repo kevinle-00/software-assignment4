@@ -9,6 +9,9 @@ import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 public class Person {
 
@@ -169,6 +172,9 @@ public class Person {
 
     // |----------------- updatePersonalDetails() - Kevin -----------------|
 
+    // TODO: Implement CLI for this method, requires user input for creation of
+    // updatedPerson object.
+
     public boolean updatePersonalDetails(String originalPersonID, Person updatedPerson) {
         // Kevin
         // Condition 1: If a person is under 18, their address cannot be changed.
@@ -217,6 +223,44 @@ public class Person {
                 }
 
                 // TODO: Condition 1, 2 and 3
+
+                // ────── VALIDATION BLOCK ──────
+
+                // Condition 2: Changing birthday, but other details also changed
+                if (isChangingBirthday(oldPerson, updatedPerson) &&
+                        !isValidBirthdayChange(oldPerson, updatedPerson)) {
+                    writer.write(line);
+                    writer.newLine();
+                    return false; // Abort update if condition failed
+                }
+
+                // Condition 1: Under 18 cannot change address
+                if (!canUpdateAddress(oldPerson, updatedPerson) &&
+                        isChangingAddress(oldPerson, updatedPerson)) {
+                    writer.write(line);
+                    writer.newLine();
+                    return false; // Abort update if condition failed
+                }
+
+                // Condition 3: ID starts with even digit, cannot change ID
+                if (!canUpdateID(oldPerson.getPersonID()) &&
+                        isChangingID(oldPerson, updatedPerson)) {
+                    writer.write(line);
+                    writer.newLine();
+                    return false; // Abort update if condition failed
+                }
+
+                // Perform update once all valid
+                String updatedLine = String.join(",",
+                        updatedPerson.getPersonID(),
+                        updatedPerson.getFirstName(),
+                        updatedPerson.getLastName(),
+                        updatedPerson.getAddress(),
+                        updatedPerson.getBirthdate());
+
+                writer.write(updatedLine);
+                writer.newLine();
+                updated = true;
             }
 
         } catch (IOException e) { // Exception handling
@@ -243,8 +287,26 @@ public class Person {
     }
 
     private int calculateAgeFromBirthday(String birthdate) {
-        // TODO: Implementation
-        return 0;
+        if (birthdate == null || birthdate.isEmpty()) {
+            return 0;
+        } else {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                LocalDate birthDateParsed = LocalDate.parse(birthdate, formatter);
+                LocalDate currentDate = LocalDate.now();
+
+                if (birthDateParsed.isAfter(currentDate)) {
+                    return 0;
+                } else {
+                    Period age = Period.between(birthDateParsed, currentDate);
+                    return age.getYears();
+                }
+
+            } catch (Exception e) {
+                System.err.println("Invalid birthdate format: " + birthdate);
+                return 0;
+            }
+        }
     }
 
     private boolean canUpdateID(String oldID) {
