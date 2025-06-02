@@ -16,7 +16,7 @@ public class Person {
 
     public Person(){
         this.demeritPoints = new HashMap<>();
-        this.isSuspended = fasle;
+        this.isSuspended = false;
         this.age = 25;
     }
 
@@ -30,8 +30,11 @@ public class Person {
         return true;
     }
 
-    public String addDemeritPoints() {
-        // Indicate that you are implementing this here:
+    public String addDemeritPoints(String dateOfOffense, int points) {
+        // Condition 1: Check DD-MM-YYYY format
+        // Condition 2: Check points range
+        //Condition 3: Check Offenses within the last 2 years 
+
         return "Success";
     }
 }
