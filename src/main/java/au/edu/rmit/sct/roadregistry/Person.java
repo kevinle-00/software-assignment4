@@ -45,9 +45,6 @@ public class Person {
 
     public boolean addPerson() {
 
-        FileWriter fileWriter = null;
-        BufferedWriter bufferedWriter = null;
-
         if (!checkPersonID() || !checkAddress() || !checkBirthdate()) {
             return false;
         }
@@ -55,9 +52,18 @@ public class Person {
         String filePath = "persons.txt";
 
         String personInfo = personID + "," + firstName + "," + lastName + "," + address + "," + birthdate + "\n";
-        
-        //  TO DO: Detect if text file is created + insert info into new text file + insert info into existing text file
-        return true;
+
+        try(FileWriter fileWriter = new FileWriter(filePath, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+
+                bufferedWriter.write(personInfo);
+                return true;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            
     }
 
     // Helper Methods
