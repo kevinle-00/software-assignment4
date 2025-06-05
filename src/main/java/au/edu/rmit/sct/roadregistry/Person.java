@@ -9,6 +9,9 @@ import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 public class Person {
 
@@ -57,22 +60,22 @@ public class Person {
 
         String personInfo = personID + "," + firstName + "," + lastName + "," + address + "," + birthdate + "\n";
 
-        try(FileWriter fileWriter = new FileWriter(filePath, true);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+        try (FileWriter fileWriter = new FileWriter(filePath, true);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
 
-                bufferedWriter.write(personInfo);
-                return true;
+            bufferedWriter.write(personInfo);
+            return true;
 
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-            
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     // Helper Methods
-    
-    //  Condition 1
+
+    // Condition 1
     private boolean checkPersonID() { // Function to evaluate if the given personID meets each criteria of condition 1
         if (this.personID != null) {
             if (!personIDLength() || !personIDNumbers() || !personIDSpecialCharacters() || !personIDUpperCase()) {
@@ -234,7 +237,43 @@ public class Person {
                     continue; // Move on
                 }
 
-                // TODO: Condition 1, 2 and 3
+                // ────── VALIDATION BLOCK ──────
+
+                // Condition 2: Changing birthday, but other details also changed
+                if (isChangingBirthday(oldPerson, updatedPerson) &&
+                        !isValidBirthdayChange(oldPerson, updatedPerson)) {
+                    writer.write(line);
+                    writer.newLine();
+                    return false; // Abort update if condition failed
+                }
+
+                // Condition 1: Under 18 cannot change address
+                if (!canUpdateAddress(oldPerson, updatedPerson) &&
+                        isChangingAddress(oldPerson, updatedPerson)) {
+                    writer.write(line);
+                    writer.newLine();
+                    return false; // Abort update if condition failed
+                }
+
+                // Condition 3: ID starts with even digit, cannot change ID
+                if (!canUpdateID(oldPerson.getPersonID()) &&
+                        isChangingID(oldPerson, updatedPerson)) {
+                    writer.write(line);
+                    writer.newLine();
+                    return false; // Abort update if condition failed
+                }
+
+                // Perform update once all valid
+                String updatedLine = String.join(",",
+                        updatedPerson.getPersonID(),
+                        updatedPerson.getFirstName(),
+                        updatedPerson.getLastName(),
+                        updatedPerson.getAddress(),
+                        updatedPerson.getBirthdate());
+
+                writer.write(updatedLine);
+                writer.newLine();
+                updated = true;
             }
 
         } catch (IOException e) { // Exception handling
@@ -261,27 +300,51 @@ public class Person {
     }
 
     private int calculateAgeFromBirthday(String birthdate) {
-        // TODO: Implementation
-        return 0;
+        if (birthdate == null || birthdate.isEmpty()) {
+            return 0;
+        } else {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                LocalDate birthDateParsed = LocalDate.parse(birthdate, formatter);
+                LocalDate currentDate = LocalDate.now();
+
+                if (birthDateParsed.isAfter(currentDate)) {
+                    return 0;
+                } else {
+                    Period age = Period.between(birthDateParsed, currentDate);
+                    return age.getYears();
+                }
+
+            } catch (Exception e) {
+                System.err.println("Invalid birthdate format: " + birthdate);
+                return 0;
+            }
+        }
     }
 
+    // Helper method to check if ID can be updated
     private boolean canUpdateID(String oldID) {
         char firstChar = oldID.charAt(0);
         return !Character.isDigit(firstChar) || ((firstChar - '0') % 2 != 0);
     }
 
+    // Helper method to check if field is being changed (not replaced with same
+    // value)
     private boolean isChanging(String oldValue, String newValue) {
         return !Objects.equals(oldValue, newValue);
     }
 
+    // Helper method to check if birthday is being changed
     private boolean isChangingBirthday(Person oldPerson, Person newPerson) {
         return isChanging(oldPerson.getBirthdate(), newPerson.getBirthdate());
     }
 
+    // Helper method to check if ID is being changed
     private boolean isChangingID(Person oldPerson, Person newPerson) {
         return isChanging(oldPerson.getPersonID(), newPerson.getPersonID());
     }
 
+    // Helper method to check if Address is being changed
     private boolean isChangingAddress(Person oldPerson, Person newPerson) {
         return isChanging(oldPerson.getAddress(), newPerson.getAddress());
     }
@@ -293,7 +356,7 @@ public class Person {
         if (!isValidDateFormat(dateOfOffense)) {
             return "Failed";
         }
-        //Condition 2: Check Points range
+        // Condition 2: Check Points range
         if (points < 1 || points > 6) {
             return "Failed";
         }
@@ -304,16 +367,16 @@ public class Person {
         // Store the offense
         demeritPoints.put(dateOfOffense, points);
 
-        // Write to TXT file 
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter("demeritPoints.txt", true))) {
-        writer.write(this.personID + "," + dateOfOffense + "," + points);
-        writer.newLine();
-    } catch (IOException e) {
-        e.printStackTrace();
-        return "Failed";
-    }
+        // Write to TXT file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("demeritPoints.txt", true))) {
+            writer.write(this.personID + "," + dateOfOffense + "," + points);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Failed";
+        }
 
-        //Condition 3: Check Offenses within the last 2 years 
+        // Condition 3: Check Offenses within the last 2 years
         int totalPoints = 0;
         LocalDate now = LocalDate.now();
         for (String dateStr : demeritPoints.keySet()) {
@@ -327,13 +390,13 @@ public class Person {
             int yearDiff = now.getYear() - offenseDate.getYear();
 
             if (yearDiff < 2 || (yearDiff == 2 &&
-                (now.getMonthValue() < offenseDate.getMonthValue() ||
-                (now.getMonthValue() == offenseDate.getMonthValue() && now.getDayOfMonth() < offenseDate.getDayOfMonth()))
-            )) {
+                    (now.getMonthValue() < offenseDate.getMonthValue() ||
+                            (now.getMonthValue() == offenseDate.getMonthValue()
+                                    && now.getDayOfMonth() < offenseDate.getDayOfMonth())))) {
                 totalPoints += demeritPoints.get(dateStr);
             }
         }
-        //Suspension rules based on age
+        // Suspension rules based on age
         if (age < 21 && totalPoints > 6) {
             isSuspended = true;
         } else if (age >= 21 && totalPoints > 12) {
@@ -342,15 +405,16 @@ public class Person {
 
         return "Success";
     }
-    //Helper method to validate DD-MM-YYYY format
-   
-     private boolean isValidDateFormat(String date) {
+    // Helper method to validate DD-MM-YYYY format
+
+    private boolean isValidDateFormat(String date) {
         if (date.length() != 10 || date.charAt(2) != '-' || date.charAt(5) != '-') {
             return false;
         }
 
         String[] parts = date.split("-");
-        if (parts.length != 3) return false;
+        if (parts.length != 3)
+            return false;
 
         String dayStr = parts[0];
         String monthStr = parts[1];
@@ -367,9 +431,6 @@ public class Person {
         return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100;
     }
 
-
-
-    
     // |----------------- Getter and Setter methods -----------------|
 
     public String getPersonID() {
@@ -427,19 +488,19 @@ public class Person {
     public void setDemeritPoints(HashMap<String, Integer> demeritPoints) {
         this.demeritPoints = demeritPoints;
     }
-    
-    public void setAge(int age) {
-    if (age >= 0 && age <= 120) {
-        this.age = age;
-    }
-}
 
-public int getTotalDemeritPoints() {
-    int total = 0;
-    for (Integer p : demeritPoints.values()) {
-        total += p;
+    public void setAge(int age) {
+        if (age >= 0 && age <= 120) {
+            this.age = age;
+        }
     }
-    return total;
-}
+
+    public int getTotalDemeritPoints() {
+        int total = 0;
+        for (Integer p : demeritPoints.values()) {
+            total += p;
+        }
+        return total;
+    }
 
 }

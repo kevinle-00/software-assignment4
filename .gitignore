@@ -1,5 +1,6 @@
 target/
-
+/persons.txt
+/persons_temp.txt
 
 .DS_Store
 
