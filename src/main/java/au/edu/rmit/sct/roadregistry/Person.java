@@ -411,12 +411,26 @@ public class Person {
         this.isSuspended = isSuspended;
     }
 
-    public HashMap<java.time.LocalDate, Integer> getDemeritPoints() {
+    public HashMap<String, Integer> getDemeritPoints() {
         return demeritPoints;
     }
 
     public void setDemeritPoints(HashMap<java.time.LocalDate, Integer> demeritPoints) {
         this.demeritPoints = demeritPoints;
     }
+    
+    public void setAge(int age) {
+    if (age >= 0 && age <= 120) {
+        this.age = age;
+    }
+}
+
+public int getTotalDemeritPoints() {
+    int total = 0;
+    for (Integer p : demeritPoints.values()) {
+        total += p;
+    }
+    return total;
+}
 
 }
