@@ -415,7 +415,7 @@ public class Person {
         return demeritPoints;
     }
 
-    public void setDemeritPoints(HashMap<java.time.LocalDate, Integer> demeritPoints) {
+    public void setDemeritPoints(HashMap<String, Integer> demeritPoints) {
         this.demeritPoints = demeritPoints;
     }
     
