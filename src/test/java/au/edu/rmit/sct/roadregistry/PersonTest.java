@@ -3,6 +3,7 @@ package au.edu.rmit.sct.roadregistry;
 import java.io.File;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +14,7 @@ public class PersonTest {
         assertTrue(true);
     }
 
-    @AfterEach
+    @BeforeEach
     public void cleanUpPersonFile(){
         File file = new File("persons.txt");
         if(file.exists()) {
