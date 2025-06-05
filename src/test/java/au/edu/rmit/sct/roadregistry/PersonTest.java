@@ -102,6 +102,36 @@ public class PersonTest {
         assertTrue(result, "Expected update to succeed even if no fields changed.");
     }
 
+    // Test to make sure addPerson() succeeds when all conditions are met.
+    @Test 
+    public void testAddValidPerson_ShouldSucceed() throws IOException {
+        Person person = new Person("56s_d%&fAB", "John", "Doe", "12|Main St|Melbourne|Victoria|Australia",
+                "15-11-2000");
+        
+        boolean result = person.addPerson();
+        assertTrue(result, "Expected to succeed when all conditions are satisfied.");
+    }
+
+    //  Test to make sure addPerson() fails when personID is less than 10 characters.
+    @Test
+    public void testPersonIDWithLessThan10Chars_ShouldFail() throws IOException{
+        Person person = new Person("56_d%&AB", "John", "Doe", "12|Main St|Melbourne|Victoria|Australia",
+                "15-11-2000");
+        
+        boolean result = person.addPerson();
+        assertFalse(result, "Expected to fail when personID is less than 10 characters.");
+    }
+
+    //  Test to make sure addPerson() fails when Person address is in the incorrect format.
+    @Test
+    public void testAddressIncorrectFormat_ShouldFail() throws IOException {
+        Person person = new Person("56_d%&AB", "John", "Doe", "12 Main St Melbourne Victoria Australia",
+                "15-11-2000");
+        
+        boolean result = person.addPerson();
+        assertFalse(result, "Expected to fail when address is in the incorrect format.");
+    }
+
     private void writeToFile(String content) throws IOException {
         File file = new File("persons.txt");
 
