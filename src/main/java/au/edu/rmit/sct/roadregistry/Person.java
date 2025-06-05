@@ -333,6 +333,32 @@ public class Person {
 
         return "Success";
     }
+    //Helper method to validate DD-MM-YYYY format
+   
+     private boolean isValidDateFormat(String date) {
+        if (date.length() != 10 || date.charAt(2) != '-' || date.charAt(5) != '-') {
+            return false;
+        }
+
+        String[] parts = date.split("-");
+        if (parts.length != 3) return false;
+
+        String dayStr = parts[0];
+        String monthStr = parts[1];
+        String yearStr = parts[2];
+
+        if (!dayStr.matches("\\d{2}") || !monthStr.matches("\\d{2}") || !yearStr.matches("\\d{4}")) {
+            return false;
+        }
+
+        int day = Integer.parseInt(dayStr);
+        int month = Integer.parseInt(monthStr);
+        int year = Integer.parseInt(yearStr);
+
+        return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100;
+    }
+
+
 
     
     // |----------------- Getter and Setter methods -----------------|
