@@ -17,6 +17,7 @@ public class PersonTest {
         assertTrue(true);
     }
 
+    //  File cleanup for before conducting each test
     @BeforeEach
     public void cleanUpPersonFile() {
         File file = new File("persons.txt");
@@ -25,6 +26,8 @@ public class PersonTest {
             System.out.println(deleted ? "Cleanup: persons.txt deleted." : "Cleanup: Failed to delete persons.txt.");
         }
     }
+    
+    // -------------------- Kevin's updatePersonalDetails() Test Cases --------------------
 
     // Test for successful update with valid inputs.
     @Test
@@ -101,6 +104,8 @@ public class PersonTest {
 
         assertTrue(result, "Expected update to succeed even if no fields changed.");
     }
+
+    // -------------------- Jack's addPerson() Test Cases --------------------
 
     // Test to make sure addPerson() succeeds when all conditions are met.
     @Test 
