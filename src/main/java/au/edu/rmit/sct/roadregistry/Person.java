@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 public class Person {
 
@@ -18,7 +17,8 @@ public class Person {
     private String lastName;
     private String address;
     private String birthdate;
-    private HashMap<java.time.LocalDate, Integer> demeritPoints; // offenseDate -> demerit points
+    private int age;
+    private HashMap<String, Integer> demeritPoints; // offenseDate -> demerit points
     private boolean isSuspended;
 
     public Person() { // Default Constructor for the Person class
@@ -27,6 +27,9 @@ public class Person {
         this.lastName = null;
         this.address = null;
         this.birthdate = null;
+        this.demeritPoints = new HashMap<>();
+        this.isSuspended = false;
+        this.age = 25;
     }
 
     public Person(String personID, String firstName, String lastName, String address, String birthdate) { // Constructor
