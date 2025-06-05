@@ -1,6 +1,6 @@
 package au.edu.rmit.sct.roadregistry;
 
-import java.util.Date;
+import java.util.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
 import java.io.File;
