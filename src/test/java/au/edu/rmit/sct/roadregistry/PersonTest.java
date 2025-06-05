@@ -132,15 +132,6 @@ public class PersonTest {
         assertFalse(result, "Expected to fail when address is in the incorrect format.");
     }
 
-    private void writeToFile(String content) throws IOException {
-        File file = new File("persons.txt");
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(content);
-            writer.newLine();
-        }
-    }
-
 
     // -------------------- Teesha's addDemeritPoints() Test Cases --------------------
 
@@ -197,5 +188,15 @@ public void testSuspensionAfterMultipleValidOffenses_ShouldSuspend() {
 
     assertTrue(person.getIsSuspended(), "Expected suspension when total > 12 for age ≥ 21.");
 }
+
+//  Helper function to assist with simulating existing text files for unit testing
+private void writeToFile(String content) throws IOException {
+        File file = new File("persons.txt");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(content);
+            writer.newLine();
+        }
+    }
 
 }
