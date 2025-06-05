@@ -1,6 +1,6 @@
 package au.edu.rmit.sct.roadregistry;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
 import java.io.File;
@@ -20,7 +20,8 @@ public class Person {
     private String lastName;
     private String address;
     private String birthdate;
-    private HashMap<Date, Integer> demeritPoints; // offenseDate -> demerit points
+    private int age;
+    private HashMap<String, Integer> demeritPoints; // offenseDate -> demerit points
     private boolean isSuspended;
 
     public Person() { // Default Constructor for the Person class
@@ -29,6 +30,9 @@ public class Person {
         this.lastName = null;
         this.address = null;
         this.birthdate = null;
+        this.demeritPoints = new HashMap<>();
+        this.isSuspended = false;
+        this.age = 25;
     }
 
     public Person(String personID, String firstName, String lastName, String address, String birthdate) { // Constructor
@@ -44,21 +48,35 @@ public class Person {
 
     }
 
-    // Setter and Get
+    // |----------------- addPerson() - Jack -----------------|
 
     public boolean addPerson() {
-        // Jack
 
-        if (conditionOne() && checkAddress() && checkBirthdate()) {
-
+        if (!checkPersonID() || !checkAddress() || !checkBirthdate()) {
+            return false;
         }
 
-        return false;
+        String filePath = "persons.txt";
+
+        String personInfo = personID + "," + firstName + "," + lastName + "," + address + "," + birthdate + "\n";
+
+        try(FileWriter fileWriter = new FileWriter(filePath, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+
+                bufferedWriter.write(personInfo);
+                return true;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            
     }
 
-    // Condition 1
-
-    private boolean conditionOne() { // Function to evaluate if the given personID meets each criteria of condition 1
+    // Helper Methods
+    
+    //  Condition 1
+    private boolean checkPersonID() { // Function to evaluate if the given personID meets each criteria of condition 1
         if (this.personID != null) {
             if (!personIDLength() || !personIDNumbers() || !personIDSpecialCharacters() || !personIDUpperCase()) {
                 return false;
@@ -332,11 +350,79 @@ public class Person {
 
     // |----------------- addDemeritPoints() - Teesha -----------------|
 
-    public String addDemeritPoints() {
-        // Indicate that you are implementing this here:
+    public String addDemeritPoints(String dateOfOffense, int points) {
+        // Condition 1: Check DD-MM-YYYY format
+        if (!isValidDateFormat(dateOfOffense)) {
+            return "Failed";
+        }
+        //Condition 2: Check Points range
+        if (points < 1 || points > 6) {
+            return "Failed";
+        }
+        // Reject duplicate entries
+        if (demeritPoints.containsKey(dateOfOffense)) {
+            return "Failed";
+        }
+        // Store the offense
+        demeritPoints.put(dateOfOffense, points);
+
+        //Condition 3: Check Offenses within the last 2 years 
+        int totalPoints = 0;
+        LocalDate now = LocalDate.now();
+        for (String dateStr : demeritPoints.keySet()) {
+            // Parse day, month, year manually
+            int day = Integer.parseInt(dateStr.substring(0, 2));
+            int month = Integer.parseInt(dateStr.substring(3, 5));
+            int year = Integer.parseInt(dateStr.substring(6, 10));
+
+            LocalDate offenseDate = LocalDate.of(year, month, day);
+
+            int yearDiff = now.getYear() - offenseDate.getYear();
+
+            if (yearDiff < 2 || (yearDiff == 2 &&
+                (now.getMonthValue() < offenseDate.getMonthValue() ||
+                (now.getMonthValue() == offenseDate.getMonthValue() && now.getDayOfMonth() < offenseDate.getDayOfMonth()))
+            )) {
+                totalPoints += demeritPoints.get(dateStr);
+            }
+        }
+        //Suspension rules based on age
+        if (age < 21 && totalPoints > 6) {
+            isSuspended = true;
+        } else if (age >= 21 && totalPoints > 12) {
+            isSuspended = true;
+        }
+
         return "Success";
     }
+    //Helper method to validate DD-MM-YYYY format
+   
+     private boolean isValidDateFormat(String date) {
+        if (date.length() != 10 || date.charAt(2) != '-' || date.charAt(5) != '-') {
+            return false;
+        }
 
+        String[] parts = date.split("-");
+        if (parts.length != 3) return false;
+
+        String dayStr = parts[0];
+        String monthStr = parts[1];
+        String yearStr = parts[2];
+
+        if (!dayStr.matches("\\d{2}") || !monthStr.matches("\\d{2}") || !yearStr.matches("\\d{4}")) {
+            return false;
+        }
+
+        int day = Integer.parseInt(dayStr);
+        int month = Integer.parseInt(monthStr);
+        int year = Integer.parseInt(yearStr);
+
+        return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100;
+    }
+
+
+
+    
     // |----------------- Getter and Setter methods -----------------|
 
     public String getPersonID() {
@@ -387,12 +473,26 @@ public class Person {
         this.isSuspended = isSuspended;
     }
 
-    public HashMap<Date, Integer> getDemeritPoints() {
+    public HashMap<String, Integer> getDemeritPoints() {
         return demeritPoints;
     }
 
-    public void setDemeritPoints(HashMap<Date, Integer> demeritPoints) {
+    public void setDemeritPoints(HashMap<String, Integer> demeritPoints) {
         this.demeritPoints = demeritPoints;
     }
+    
+    public void setAge(int age) {
+    if (age >= 0 && age <= 120) {
+        this.age = age;
+    }
+}
+
+public int getTotalDemeritPoints() {
+    int total = 0;
+    for (Integer p : demeritPoints.values()) {
+        total += p;
+    }
+    return total;
+}
 
 }
