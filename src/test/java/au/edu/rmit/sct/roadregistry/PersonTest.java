@@ -106,14 +106,14 @@ public class PersonTest {
 
     // -------------------- Jack's addPerson() Test Cases --------------------
 
-    // Test to make sure addPerson() succeeds when all conditions are met.
+    // Test to make sure addPerson() succeeds when all Person's information conditions are met.
     @Test 
     public void testAddValidPerson_ShouldSucceed() throws IOException {
         Person person = new Person("56s_d%&fAB", "John", "Doe", "12|Main St|Melbourne|Victoria|Australia",
                 "15-11-2000");
         
         boolean result = person.addPerson();
-        assertTrue(result, "Expected to succeed when all conditions are satisfied.");
+        assertTrue(result, "Expected to succeed when all Person information conditions are satisfied.");
     }
 
     //  Test to make sure addPerson() fails when personID is less than 10 characters.
