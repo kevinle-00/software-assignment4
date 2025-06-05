@@ -367,6 +367,15 @@ public class Person {
         // Store the offense
         demeritPoints.put(dateOfOffense, points);
 
+        // Write to TXT file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("demeritPoints.txt", true))) {
+            writer.write(this.personID + "," + dateOfOffense + "," + points);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Failed";
+        }
+
         // Condition 3: Check Offenses within the last 2 years
         int totalPoints = 0;
         LocalDate now = LocalDate.now();
