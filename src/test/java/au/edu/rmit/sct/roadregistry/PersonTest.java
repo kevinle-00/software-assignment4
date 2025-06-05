@@ -129,7 +129,7 @@ public class PersonTest {
     // Test to make sure addPerson() fails when personID does not contain at least two special characters.
     @Test 
     public void testPersonIDOneSpecialCharacter_ShouldFail() throws IOException {
-        Person person = new Person("56s_duc&AB", "John", "Doe", "12|Main St|Melbourne|Victoria|Australia",
+        Person person = new Person("56saduc&AB", "John", "Doe", "12|Main St|Melbourne|Victoria|Australia",
                 "15-11-2000");
         
         boolean result = person.addPerson();

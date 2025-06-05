@@ -72,7 +72,7 @@ public class Person {
 
     }
 
-    // Helper Methods
+    // Helper Methods for addPerson()
 
     // Condition 1
     public boolean checkPersonID() { // Function to evaluate if the given personID meets each criteria of condition 1
@@ -114,7 +114,7 @@ public class Person {
                                                   // characters 3 and 8
         int specialCount = 0;
 
-        for (int i = 2; i < this.personID.length() - 2; i++) {
+        for (int i = 2; i <= 7 && i < this.personID.length(); i++) {
             if (!Character.isLetterOrDigit(this.personID.charAt(i))) {
                 specialCount++;
             }
