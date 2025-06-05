@@ -304,10 +304,37 @@ public class Person {
         // Store the offense
         demeritPoints.put(dateOfOffense, points);
 
+        //Condition 3: Check Offenses within the last 2 years 
+        int totalPoints = 0;
+        LocalDate now = LocalDate.now();
+        for (String dateStr : demeritPoints.keySet()) {
+            // Parse day, month, year manually
+            int day = Integer.parseInt(dateStr.substring(0, 2));
+            int month = Integer.parseInt(dateStr.substring(3, 5));
+            int year = Integer.parseInt(dateStr.substring(6, 10));
+
+            LocalDate offenseDate = LocalDate.of(year, month, day);
+
+            int yearDiff = now.getYear() - offenseDate.getYear();
+
+            if (yearDiff < 2 || (yearDiff == 2 &&
+                (now.getMonthValue() < offenseDate.getMonthValue() ||
+                (now.getMonthValue() == offenseDate.getMonthValue() && now.getDayOfMonth() < offenseDate.getDayOfMonth()))
+            )) {
+                totalPoints += demeritPoints.get(dateStr);
+            }
+        }
+        //Suspension rules based on age
+        if (age < 21 && totalPoints > 6) {
+            isSuspended = true;
+        } else if (age >= 21 && totalPoints > 12) {
+            isSuspended = true;
+        }
 
         return "Success";
     }
 
+    
     // |----------------- Getter and Setter methods -----------------|
 
     public String getPersonID() {
