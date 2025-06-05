@@ -1,6 +1,6 @@
 package au.edu.rmit.sct.roadregistry;
 
-import java.util.LocalDate;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
 import java.io.File;
@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class Person {
 
@@ -17,7 +18,7 @@ public class Person {
     private String lastName;
     private String address;
     private String birthdate;
-    private HashMap<Date, Integer> demeritPoints; // offenseDate -> demerit points
+    private HashMap<java.time.LocalDate, Integer> demeritPoints; // offenseDate -> demerit points
     private boolean isSuspended;
 
     public Person() { // Default Constructor for the Person class
@@ -339,11 +340,11 @@ public class Person {
         this.isSuspended = isSuspended;
     }
 
-    public HashMap<Date, Integer> getDemeritPoints() {
+    public HashMap<java.time.LocalDate, Integer> getDemeritPoints() {
         return demeritPoints;
     }
 
-    public void setDemeritPoints(HashMap<Date, Integer> demeritPoints) {
+    public void setDemeritPoints(HashMap<java.time.LocalDate, Integer> demeritPoints) {
         this.demeritPoints = demeritPoints;
     }
 
