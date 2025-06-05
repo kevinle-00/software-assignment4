@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +25,7 @@ public class PersonTest {
             System.out.println(deleted ? "Cleanup: persons.txt deleted." : "Cleanup: Failed to delete persons.txt.");
         }
     }
-    
+
     // -------------------- Kevin's updatePersonalDetails() Test Cases --------------------
 
     // Test for successful update with valid inputs.
