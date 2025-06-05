@@ -351,60 +351,59 @@ public class Person {
 
     // |----------------- addDemeritPoints() - Teesha -----------------|
 
-    public String addDemeritPoints(String dateOfOffense, int points) {
-        // Condition 1: Check DD-MM-YYYY format
-        if (!isValidDateFormat(dateOfOffense)) {
-            return "Failed";
-        }
-        // Condition 2: Check Points range
-        if (points < 1 || points > 6) {
-            return "Failed";
-        }
-        // Reject duplicate entries
-        if (demeritPoints.containsKey(dateOfOffense)) {
-            return "Failed";
-        }
-        // Store the offense
-        demeritPoints.put(dateOfOffense, points);
-
-        // Write to TXT file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("demeritPoints.txt", true))) {
-            writer.write(this.personID + "," + dateOfOffense + "," + points);
-            writer.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Failed";
-        }
-
-        // Condition 3: Check Offenses within the last 2 years
-        int totalPoints = 0;
-        LocalDate now = LocalDate.now();
-        for (String dateStr : demeritPoints.keySet()) {
-            // Parse day, month, year manually
-            int day = Integer.parseInt(dateStr.substring(0, 2));
-            int month = Integer.parseInt(dateStr.substring(3, 5));
-            int year = Integer.parseInt(dateStr.substring(6, 10));
-
-            LocalDate offenseDate = LocalDate.of(year, month, day);
-
-            int yearDiff = now.getYear() - offenseDate.getYear();
-
-            if (yearDiff < 2 || (yearDiff == 2 &&
-                    (now.getMonthValue() < offenseDate.getMonthValue() ||
-                            (now.getMonthValue() == offenseDate.getMonthValue()
-                                    && now.getDayOfMonth() < offenseDate.getDayOfMonth())))) {
-                totalPoints += demeritPoints.get(dateStr);
-            }
-        }
-        // Suspension rules based on age
-        if (age < 21 && totalPoints > 6) {
-            isSuspended = true;
-        } else if (age >= 21 && totalPoints > 12) {
-            isSuspended = true;
-        }
-
-        return "Success";
+   public String addDemeritPoints(String dateOfOffense, int points) {
+    // Check valid date format
+    if (!isValidDateFormat(dateOfOffense)) {
+        return "Failed";
     }
+
+    // Check point range
+    if (points < 1 || points > 6) {
+        return "Failed";
+    }
+
+    // Reject duplicate offense date
+    if (demeritPoints.containsKey(dateOfOffense)) {
+        return "Failed";
+    }
+
+    // Store the offense
+    demeritPoints.put(dateOfOffense, points);
+
+    // Try to persist to file
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("demeritPoints.txt", true))) {
+        writer.write(this.personID + "," + dateOfOffense + "," + points);
+        writer.newLine();
+    } catch (IOException e) {
+        e.printStackTrace();
+        return "Failed";
+    }
+
+    // Recalculate total valid points (within 2 years)
+    int totalPoints = 0;
+    LocalDate now = LocalDate.now();
+
+    for (String dateStr : demeritPoints.keySet()) {
+        int day = Integer.parseInt(dateStr.substring(0, 2));
+        int month = Integer.parseInt(dateStr.substring(3, 5));
+        int year = Integer.parseInt(dateStr.substring(6, 10));
+
+        LocalDate offenseDate = LocalDate.of(year, month, day);
+
+        if (!offenseDate.isBefore(now.minusYears(2))) {
+            totalPoints += demeritPoints.get(dateStr);
+        }
+    }
+
+    // Apply suspension rule
+    if ((age < 21 && totalPoints > 6) || (age >= 21 && totalPoints > 12)) {
+        isSuspended = true;
+    }
+
+    return "Success";
+}
+
+
     // Helper method to validate DD-MM-YYYY format
 
     private boolean isValidDateFormat(String date) {

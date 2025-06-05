@@ -112,4 +112,61 @@ public class PersonTest {
         }
     }
 
+
+    // -------------------- Teesha's addDemeritPoints() Test Cases --------------------
+
+@Test
+public void testValidDemeritEntry_ShouldReturnSuccess() {
+    Person person = new Person();
+    person.setPersonID("56s_d%&fAB");
+    person.setAge(25);
+    String result = person.addDemeritPoints("01-06-2024", 3);
+    assertEquals("Success", result, "Expected 'Success' for valid input.");
+}
+
+@Test
+public void testInvalidDateFormat_ShouldReturnFailed() {
+    Person person = new Person();
+    person.setPersonID("56s_d%&fAB");
+    person.setAge(25);
+    String result = person.addDemeritPoints("2024/06/01", 4);
+    assertEquals("Failed", result, "Expected 'Failed' due to invalid date format.");
+}
+
+@Test
+public void testInvalidPointRange_ShouldReturnFailed() {
+    Person person = new Person();
+    person.setPersonID("56s_d%&fAB");
+    person.setAge(25);
+    String result = person.addDemeritPoints("05-06-2024", 0);
+    assertEquals("Failed", result, "Expected 'Failed' due to point value out of range.");
+}
+
+@Test
+public void testOffenseDate_ShouldReturnFailed() {
+    Person person = new Person();
+    person.setPersonID("56s_d%&fAB");
+    person.setAge(25);
+
+    String firstResult = person.addDemeritPoints("10-06-2024", 2); // valid entry
+    String secondResult = person.addDemeritPoints("10-06-2024", 3); // duplicate entry
+
+    assertEquals("Failed", secondResult, "Expected 'Failed' due to duplicate offense date.");
+}
+
+
+@Test
+public void testSuspensionAfterMultipleValidOffenses_ShouldSuspend() {
+    Person person = new Person();
+    person.setPersonID("56s_d@kFAB");
+    person.setAge(25); // Age ≥ 21, threshold is 12
+
+    // Add three offenses within 2 years
+    person.addDemeritPoints("01-06-2024", 5);
+    person.addDemeritPoints("02-06-2024", 5);
+    person.addDemeritPoints("03-06-2024", 4); // total = 14
+
+    assertTrue(person.getIsSuspended(), "Expected suspension when total > 12 for age ≥ 21.");
+}
+
 }
