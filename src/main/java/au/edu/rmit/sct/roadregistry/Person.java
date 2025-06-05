@@ -288,8 +288,23 @@ public class Person {
 
     // |----------------- addDemeritPoints() - Teesha -----------------|
 
-    public String addDemeritPoints() {
-        // Indicate that you are implementing this here:
+    public String addDemeritPoints(String dateOfOffense, int points) {
+        // Condition 1: Check DD-MM-YYYY format
+        if (!isValidDateFormat(dateOfOffense)) {
+            return "Failed";
+        }
+        //Condition 2: Check Points range
+        if (points < 1 || points > 6) {
+            return "Failed";
+        }
+        // Reject duplicate entries
+        if (demeritPoints.containsKey(dateOfOffense)) {
+            return "Failed";
+        }
+        // Store the offense
+        demeritPoints.put(dateOfOffense, points);
+
+
         return "Success";
     }
 
