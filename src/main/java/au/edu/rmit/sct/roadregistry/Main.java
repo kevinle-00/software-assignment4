@@ -8,20 +8,22 @@ public class Main {
         File file = new File("persons.txt");
         if (file.exists()) {
             if (file.delete()) {
-                System.out.println("persons.txt deleted after run.");
+                System.out.println(" Existing persons.txt deleted before run.");
             } else {
-                System.out.println("Failed to delete persons.txt.");
+                System.out.println("No existing persons.txt to delete.");
             }
         }
 
         Person person = new Person(
-                "56s_d%&fAB",
+                "56s_d%&fA",
                 "John",
                 "Doe",
                 "32|Highland Street|Melbourne|Victoria|Australia",
                 "15-11-1990");
 
-        person.addPerson();
+        boolean result = person.addPerson();
+
+        System.out.println(result);
 
     
     }

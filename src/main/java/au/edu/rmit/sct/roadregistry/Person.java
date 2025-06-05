@@ -76,7 +76,7 @@ public class Person {
     // Helper Methods
 
     // Condition 1
-    private boolean checkPersonID() { // Function to evaluate if the given personID meets each criteria of condition 1
+    public boolean checkPersonID() { // Function to evaluate if the given personID meets each criteria of condition 1
         if (this.personID != null) {
             if (!personIDLength() || !personIDNumbers() || !personIDSpecialCharacters() || !personIDUpperCase()) {
                 return false;
@@ -144,8 +144,8 @@ public class Person {
     }
 
     // Condition 2
-    private boolean checkAddress() { // Check if address is in the right format 'Street
-                                     // Number|Street|City|State|Country'
+    public boolean checkAddress() { // Check if address is in the right format 'Street
+                                    // Number|Street|City|State|Country'
 
         if (this.address == null) {
             return false;
@@ -165,7 +165,7 @@ public class Person {
     }
 
     // Condition 3
-    private boolean checkBirthdate() { // Check if birthdate is in the correct format 'DD-MM-YYYY'
+    public boolean checkBirthdate() { // Check if birthdate is in the correct format 'DD-MM-YYYY'
 
         if (this.birthdate == null) {
             return false;
@@ -229,6 +229,12 @@ public class Person {
                 // Create oldPerson object using parsed fields
                 Person oldPerson = new Person(existingID, existingFirst, existingLast, existingAddress,
                         existingBirthdate);
+
+                // Validate input of updatedPerson
+                if (!updatedPerson.checkPersonID() || !updatedPerson.checkAddress()
+                        || !updatedPerson.checkBirthdate()) {
+                    return false;
+                }
 
                 // Check if this is the person to update, if not, move on
                 if (!existingID.equals(originalPersonID)) {
