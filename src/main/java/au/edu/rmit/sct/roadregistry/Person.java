@@ -286,6 +286,22 @@ public class Person {
             return false;
         }
 
+        if (updated) {
+            // Replace original file with temp file
+            if (inputFile.delete()) {
+                if (!tempFile.renameTo(inputFile)) {
+                    System.err.println("Failed to rename temp file to original file");
+                    return false;
+                }
+            } else {
+                System.err.println("Failed to delete original file");
+                return false;
+            }
+        } else {
+            // Clean up temp file if no update was made
+            tempFile.delete();
+        }
+
         return updated;
     }
 
@@ -356,58 +372,57 @@ public class Person {
 
     // |----------------- addDemeritPoints() - Teesha -----------------|
 
-   public String addDemeritPoints(String dateOfOffense, int points) {
-    // Check valid date format
-    if (!isValidDateFormat(dateOfOffense)) {
-        return "Failed";
-    }
-
-    // Check point range
-    if (points < 1 || points > 6) {
-        return "Failed";
-    }
-
-    // Reject duplicate offense date
-    if (demeritPoints.containsKey(dateOfOffense)) {
-        return "Failed";
-    }
-
-    // Store the offense
-    demeritPoints.put(dateOfOffense, points);
-
-    // Try to persist to file
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter("demeritPoints.txt", true))) {
-        writer.write(this.personID + "," + dateOfOffense + "," + points);
-        writer.newLine();
-    } catch (IOException e) {
-        e.printStackTrace();
-        return "Failed";
-    }
-
-    // Recalculate total valid points (within 2 years)
-    int totalPoints = 0;
-    LocalDate now = LocalDate.now();
-
-    for (String dateStr : demeritPoints.keySet()) {
-        int day = Integer.parseInt(dateStr.substring(0, 2));
-        int month = Integer.parseInt(dateStr.substring(3, 5));
-        int year = Integer.parseInt(dateStr.substring(6, 10));
-
-        LocalDate offenseDate = LocalDate.of(year, month, day);
-
-        if (!offenseDate.isBefore(now.minusYears(2))) {
-            totalPoints += demeritPoints.get(dateStr);
+    public String addDemeritPoints(String dateOfOffense, int points) {
+        // Check valid date format
+        if (!isValidDateFormat(dateOfOffense)) {
+            return "Failed";
         }
+
+        // Check point range
+        if (points < 1 || points > 6) {
+            return "Failed";
+        }
+
+        // Reject duplicate offense date
+        if (demeritPoints.containsKey(dateOfOffense)) {
+            return "Failed";
+        }
+
+        // Store the offense
+        demeritPoints.put(dateOfOffense, points);
+
+        // Try to persist to file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("demeritPoints.txt", true))) {
+            writer.write(this.personID + "," + dateOfOffense + "," + points);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Failed";
+        }
+
+        // Recalculate total valid points (within 2 years)
+        int totalPoints = 0;
+        LocalDate now = LocalDate.now();
+
+        for (String dateStr : demeritPoints.keySet()) {
+            int day = Integer.parseInt(dateStr.substring(0, 2));
+            int month = Integer.parseInt(dateStr.substring(3, 5));
+            int year = Integer.parseInt(dateStr.substring(6, 10));
+
+            LocalDate offenseDate = LocalDate.of(year, month, day);
+
+            if (!offenseDate.isBefore(now.minusYears(2))) {
+                totalPoints += demeritPoints.get(dateStr);
+            }
+        }
+
+        // Apply suspension rule
+        if ((age < 21 && totalPoints > 6) || (age >= 21 && totalPoints > 12)) {
+            isSuspended = true;
+        }
+
+        return "Success";
     }
-
-    // Apply suspension rule
-    if ((age < 21 && totalPoints > 6) || (age >= 21 && totalPoints > 12)) {
-        isSuspended = true;
-    }
-
-    return "Success";
-}
-
 
     // Helper method to validate DD-MM-YYYY format
 
