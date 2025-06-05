@@ -118,7 +118,7 @@ public class PersonTest {
 
     //  Test to make sure addPerson() fails when personID is less than 10 characters.
     @Test
-    public void testPersonIDWithLessThan10Chars_ShouldFail() throws IOException{
+    public void testPersonIDWithLessThan10Characters_ShouldFail() throws IOException{
         Person person = new Person("56_d%&AB", "John", "Doe", "12|Main St|Melbourne|Victoria|Australia",
                 "15-11-2000");
         
@@ -126,14 +126,34 @@ public class PersonTest {
         assertFalse(result, "Expected to fail when personID is less than 10 characters.");
     }
 
-    //  Test to make sure addPerson() fails when Person address is in the incorrect format.
-    @Test
-    public void testAddressIncorrectFormat_ShouldFail() throws IOException {
-        Person person = new Person("56_d%&AB", "John", "Doe", "12 Main St Melbourne Victoria Australia",
+    // Test to make sure addPerson() fails when personID does not contain at least two special characters.
+    @Test 
+    public void testPersonIDOneSpecialCharacter_ShouldFail() throws IOException {
+        Person person = new Person("56s_duc&AB", "John", "Doe", "12|Main St|Melbourne|Victoria|Australia",
                 "15-11-2000");
         
         boolean result = person.addPerson();
-        assertFalse(result, "Expected to fail when address is in the incorrect format.");
+        assertFalse(result, "Expected to fail when personID does not contain at least two special characters.");
+    }
+
+    //  Test to make sure addPerson() fails when Person address does not have 'Victoria' as the state.
+    @Test
+    public void testAddressStateNotVictoria_ShouldFail() throws IOException {
+        Person person = new Person("56s_d%&fAB", "John", "Doe", "12|Main St|Melbourne|Queensland|Australia",
+                "15-11-2000");
+        
+        boolean result = person.addPerson();
+        assertFalse(result, "Expected to fail when address does not have 'Victoria' as the state.");
+    }
+
+    //  Test to make sure addPerson() birthdate is in incorrect format.
+    @Test
+    public void testBirthdateIncorrectFormat_ShouldFail() throws IOException {
+        Person person = new Person("56s_d%&fAB", "John", "Doe", "12|Main St|Melbourne|Victoria|Australia",
+                "15-011-2000");
+
+        boolean result = person.addPerson();
+        assertFalse(result, "Expected to fail when birthdate is in the incorrect format ('DD/MM/YYYY')");
     }
 
 
