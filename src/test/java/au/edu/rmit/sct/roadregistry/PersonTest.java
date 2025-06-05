@@ -103,10 +103,9 @@ public class PersonTest {
     }
 
     private void writeToFile(String content) throws IOException {
-        File file = new File("target/test-output/persons.txt");
-        file.getParentFile().mkdirs(); // Create directories if they don’t exist
+        File file = new File("persons.txt");
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("persons.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(content);
             writer.newLine();
         }
