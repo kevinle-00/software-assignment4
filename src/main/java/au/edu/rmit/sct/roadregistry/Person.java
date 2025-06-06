@@ -120,7 +120,7 @@ public class Person {
             }
         }
 
-        if (specialCount < 2) { // If number of special is less than 2, return false
+        if (specialCount < 2) { // If number of special characters is less than 2, return false
             return false;
         }
 
