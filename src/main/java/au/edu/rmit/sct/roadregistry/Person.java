@@ -11,7 +11,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-// Sample
+
 public class Person {
 
     private String personID;
