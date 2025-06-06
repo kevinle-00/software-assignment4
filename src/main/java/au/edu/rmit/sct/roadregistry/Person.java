@@ -1,5 +1,5 @@
 package au.edu.rmit.sct.roadregistry;
-// Person
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
